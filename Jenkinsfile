@@ -35,7 +35,7 @@ pipeline {
  }
  stage('terraform apply'){
      steps{
-	  sh '/usr/bin/terraform apply -var ami=${ami}'
+	  sh '/usr/bin/terraform apply -var ami=${ami} -auto-approve'
      } 
   }
 }
