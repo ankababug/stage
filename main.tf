@@ -1,6 +1,7 @@
 provider "aws" {
   region  = var.region
-  profile= "myprofile"
+  shared_credentials_file= "/var/lib/jenkins/.aws/credentials"
+  profile= "jenkins"
 }
 
 resource "aws_vpc" "stage-vpc" {
