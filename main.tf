@@ -74,3 +74,16 @@ resource "aws_security_group" "ssh-sg" {
     cidr_blocks     = ["0.0.0.0/0"]
   }
 }
+
+resource "aws_instance" "web" {
+  ami           = var.ami
+  instance_type = "t2.micro"
+  key_name      = var.key
+  subnet_id     = aws_subnet.pub-sub-stage.id
+  associate_public_ip_address= true
+  
+
+  tags = {
+    Name = "stage-ec2"
+  }
+}

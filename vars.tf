@@ -20,5 +20,9 @@ variable "sub-cidrs" {
 
 #variable "access_key" { }
 #variable "secret_key" { }
+variable "ami" { }
+variable "key" {
+  default= "prod-key"
+}
 
 
