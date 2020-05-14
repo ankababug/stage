@@ -1,23 +1,42 @@
 pipeline {
  agent any
  stages {
-  stage('checkout') {
+ stage('checkout') {
     steps {
        git branch: 'master', url: 'https://github.com/ankababug/stage.git'
     }
   }
  stage('environment') {
-    steps {
-       AWS_ACCESS_KEY_ID= credentials('jenkins-aws-secret-key-id')
-       AWS_SECRET_ACCESS_KEY= credentials('jenkins-aws-secret-access-key')
-    }
+     steps{
+	withCredentials([string(credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'Access_key_ID'), 
+			string(credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'Secret_key_ID')]) {
+					
+			echo "${Access_key_ID}" 
+		        echo "${Secret_key_ID}"
+				    
+		        sh "echo $HOME"
+			sh "echo [jenkins] > ~/.aws/credentials"
+			sh "echo aws_access_key_id=${Access_key_ID} >> ~/.aws/credentials"
+			sh "echo aws_secret_access_key=${Secret_key_ID} >> ~/.aws/credentials"
+
+	}
+     }
+  }
+ 
+ stage('terraform init'){
+     steps{
+	   sh '/usr/bin/terraform init'
+     }
  }
- stage('Provision infrastructure') {
- steps {
- sh "/usr/bin/terraform init"
- sh "/usr/bin/terraform plan -out=plan"
- sh "/usr/bin/terraform apply plan"
+ stage('terraform plan -out=plan'){
+     steps{
+	   sh '/usr/bin/terraform plan'
+     }  
  }
-}
+ stage('terraform apply'){
+     steps{
+	  sh '/usr/bin/terraform apply'
+     } 
+  }
 }
 }
