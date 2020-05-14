@@ -25,17 +25,17 @@ pipeline {
  
  stage('terraform init'){
      steps{
-	   sh '/usr/bin/terraform init'
+	   sh '/usr/bin/terraform init -var ami=${ami}'
      }
  }
  stage('terraform plan -out=plan'){
      steps{
-	   sh '/usr/bin/terraform plan'
+	   sh '/usr/bin/terraform plan -var ami=${ami}'
      }  
  }
  stage('terraform apply'){
      steps{
-	  sh '/usr/bin/terraform apply'
+	  sh '/usr/bin/terraform apply -var ami=${ami}'
      } 
   }
 }
